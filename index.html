@@ -163,8 +163,7 @@
     grid-area:sig; width:100%; height:auto; max-height:162px; object-fit:contain;
     align-self:center; justify-self:end; opacity:0.9; pointer-events:none;
   }
-  html[data-theme="dark"] .hero-signature{filter:invert(1);}
-  .hero-body{
+    .hero-body{
     display:grid;
     grid-template-columns:2fr 1fr;
     grid-template-areas:"info sig";
@@ -173,15 +172,15 @@
   }
   .hero-info{grid-area:info; display:flex; align-items:center; gap:36px;}
   .avatar{
-    width:200px; height:200px; flex-shrink:0; border-radius:50px;
-    background:var(--card); border:1px solid var(--line); padding:10px;
+    width:220px; height:220px; flex-shrink:0; border-radius:54px;
+    background:var(--card); border:1px solid var(--line); padding:20px;
     color:#fff; display:flex; align-items:center; justify-content:center;
     font-family:'Mitr','Noto Sans Thai',sans-serif; font-weight:400; font-size:24px;
     overflow:hidden;
     box-shadow:0 18px 32px -14px rgba(16,24,43,0.4), 0 6px 14px -6px rgba(16,24,43,0.28);
     backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
   }
-  .avatar img{width:100%; height:100%; object-fit:cover; display:block; border-radius:38px;}
+  .avatar img{width:180px; height:180px; object-fit:cover; display:block; border-radius:40px; flex-shrink:0;}
   .hero-namewrap h1{font-size:clamp(22px, 3vw + 8px, 32px); line-height:1.2; margin:0 0 4px;}
   .hero-namewrap p{margin:0; color:var(--sub); font-size:clamp(15px, 1vw + 11px, 21px); line-height:1.5;}
   .hero-actions{display:flex; gap:12px; margin-top:26px; flex-wrap:wrap;}
@@ -511,7 +510,8 @@
       grid-template-areas:"info";
     }
     .hero-info{flex-direction:column; align-items:center; gap:24px;}
-    .hero-body .avatar{margin:0 auto; width:220px; height:220px; border-radius:52px;}
+    .hero-body .avatar{margin:0 auto; width:246px; height:246px; border-radius:60px; padding:23px;}
+    .hero-body .avatar img{width:200px; height:200px; border-radius:44px;}
     .hero-namewrap{text-align:center;}
     .hero-namewrap p{margin-top:-2px;}
     .hero-signature{
@@ -526,7 +526,8 @@
   /* ---------- SMALL PHONE (≤479px) ---------- */
   @media (max-width:479px){
     .info-grid{grid-template-columns:1fr;}
-    .hero-body .avatar{width:176px; height:176px; border-radius:42px;}
+    .hero-body .avatar{width:192px; height:192px; border-radius:46px; padding:18px;}
+    .hero-body .avatar img{width:156px; height:156px; border-radius:34px;}
     .footer-crest img{width:176px; height:176px;}
     .pill{padding:11px 18px; font-size:13.5px;}
     .icon-btn-group{padding:3px; gap:4px;}
