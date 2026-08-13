@@ -100,14 +100,31 @@
   .pill-ghost{background:var(--card-soft); color:var(--ink); border:1px solid var(--line);}
 
   /* ---------- GLASS + HOVER (shared) ---------- */
-  .nav-inner, .hero-card, .section-card, .card, .prog-card, .tpt-card, .footer-card, .info-field, .mobile-menu, .icon-btn-group{
+  .nav-inner, .hero-card, .section-card, .card, .prog-card, .tpt-card, .footer-card, .ach-placeholder-card, .cert-gallery, .info-field, .mobile-menu, .icon-btn-group{
     backdrop-filter:blur(22px);
     -webkit-backdrop-filter:blur(22px);
     transition:transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s ease, background .28s ease;
   }
-  .hero-card:hover, .section-card:hover, .card:hover, .prog-card:hover, .tpt-card:hover, .footer-card:hover{
+
+  /* ---------- ACTIVE SHADOW (hover or tap): pink / yellow / purple blend, plain box-shadow ---------- */
+  .hero-card:hover, .section-card:hover, .card:hover, .prog-card:hover, .tpt-card:hover, .footer-card:hover, .ach-placeholder-card:hover, .cert-gallery:hover, .avatar:hover, .footer-crest-badge:hover,
+  .hero-card.is-glow-active, .section-card.is-glow-active, .card.is-glow-active, .prog-card.is-glow-active, .tpt-card.is-glow-active, .footer-card.is-glow-active, .ach-placeholder-card.is-glow-active, .cert-gallery.is-glow-active, .avatar.is-glow-active, .footer-crest-badge.is-glow-active{
     transform:translateY(-6px);
     background:var(--card);
+    box-shadow:
+      -14px 16px 34px -6px rgba(255,64,168,0.55),
+      14px 16px 34px -6px rgba(255,209,48,0.5),
+      0 -14px 34px -6px rgba(138,68,255,0.5);
+  }
+
+  /* ---------- BIG CARD YIELDS TO NESTED SMALL CARD: when a small card inside it is active, the outer big card cancels its own glow ---------- */
+  .section-card:hover:has(.prog-card:hover, .tpt-card:hover, .ach-placeholder-card:hover, .cert-gallery:hover),
+  .section-card.is-glow-active:has(.prog-card.is-glow-active, .tpt-card.is-glow-active, .ach-placeholder-card.is-glow-active, .cert-gallery.is-glow-active),
+  .hero-card:hover:has(.avatar:hover),
+  .hero-card.is-glow-active:has(.avatar.is-glow-active),
+  .footer-card:hover:has(.footer-crest-badge:hover),
+  .footer-card.is-glow-active:has(.footer-crest-badge.is-glow-active){
+    transform:none;
     box-shadow:var(--shadow);
   }
 
@@ -220,7 +237,7 @@
   .hero-card, .section-card{
     background:var(--card); border-radius:var(--radius-lg);
     border:1px solid var(--line); box-shadow:var(--shadow);
-    padding:36px; position:relative; overflow:hidden;
+    padding:36px; position:relative;
   }
   .hero-top{display:flex; justify-content:space-between; align-items:flex-start; gap:20px; flex-wrap:wrap;}
   .hero-signature{
@@ -263,9 +280,6 @@
     opacity:0; transition:opacity .35s ease;
   }
   .avatar:hover::after, .footer-crest-badge:hover::after{ opacity:1; }
-  @media (hover:hover) and (pointer:fine){
-    .avatar:hover, .footer-crest-badge:hover{ box-shadow:0 22px 40px -16px rgba(16,24,43,0.45), 0 8px 18px -8px rgba(16,24,43,0.3); }
-  }
   .hero-namewrap h1{font-size:clamp(22px, 3vw + 8px, 32px); line-height:1.2; margin:0 0 4px;}
   .hero-namewrap p{margin:0; color:var(--sub); font-size:clamp(15px, 1vw + 11px, 21px); line-height:1.5;}
   .hero-actions{display:flex; gap:12px; margin-top:26px; flex-wrap:wrap;}
@@ -1290,6 +1304,22 @@
       });
     });
   }
+
+  // ---------- Card glow shadow on tap (touch devices) ----------
+  // Delegated + closest(): tapping a small card activates only the nearest matching card
+  // (the small card itself, e.g. avatar/logo), not an ancestor big card it happens to sit inside.
+  var glowSelector = '.hero-card, .section-card, .card, .prog-card, .tpt-card, .footer-card, .ach-placeholder-card, .cert-gallery, .avatar, .footer-crest-badge';
+  var glowShadowCards = Array.prototype.slice.call(document.querySelectorAll(glowSelector));
+  function clearGlowActive(){
+    glowShadowCards.forEach(function(c){ c.classList.remove('is-glow-active'); });
+  }
+  document.addEventListener('touchstart', function(e){
+    clearGlowActive();
+    var target = e.target.closest(glowSelector);
+    if (target) target.classList.add('is-glow-active');
+  }, {passive: true});
+  document.addEventListener('touchend', clearGlowActive);
+  document.addEventListener('touchcancel', clearGlowActive);
 
   // ---------- Back to top ----------
   var backToTop = document.getElementById('backToTop');
