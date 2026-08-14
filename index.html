@@ -118,15 +118,20 @@
       0 -14px 34px -6px rgba(138,68,255,0.5);
   }
 
-  /* ---------- BIG CARD YIELDS TO NESTED SMALL CARD: when a small card inside it is active, the outer big card cancels its own glow ---------- */
-  .section-card:hover:has(.prog-card:hover, .tpt-card:hover, .ach-placeholder-card:hover, .cert-gallery:hover),
-  .section-card.is-glow-active:has(.prog-card.is-glow-active, .tpt-card.is-glow-active, .ach-placeholder-card.is-glow-active, .cert-gallery.is-glow-active),
-  .hero-card:hover:has(.avatar:hover),
-  .hero-card.is-glow-active:has(.avatar.is-glow-active),
-  .footer-card:hover:has(.footer-crest-badge:hover),
-  .footer-card.is-glow-active:has(.footer-crest-badge.is-glow-active){
+  /* ---------- BIG CARD YIELDS TO NESTED SMALL ELEMENT: when a small card/button inside it is active, the outer big element cancels its own glow ---------- */
+  :is(.hero-card, .section-card, .card, .prog-card, .tpt-card, .footer-card, .ach-placeholder-card, .cert-gallery, .nav-inner):hover:has(:is(.prog-card, .tpt-card, .ach-placeholder-card, .cert-gallery, .avatar, .footer-crest-badge, .pill, .icon-btn):hover),
+  :is(.hero-card, .section-card, .card, .prog-card, .tpt-card, .footer-card, .ach-placeholder-card, .cert-gallery, .nav-inner).is-glow-active:has(:is(.prog-card, .tpt-card, .ach-placeholder-card, .cert-gallery, .avatar, .footer-crest-badge, .pill, .icon-btn).is-glow-active){
     transform:none;
     box-shadow:var(--shadow);
+  }
+
+  /* ---------- BUTTON GLOW: pill / icon-btn / back-to-top get the same pink-yellow-purple blend ---------- */
+  .pill:hover, .icon-btn:hover, .back-to-top:hover,
+  .pill.is-glow-active, .icon-btn.is-glow-active, .back-to-top.is-glow-active{
+    box-shadow:
+      -10px 10px 24px -8px rgba(255,64,168,0.55),
+      10px 10px 24px -8px rgba(255,209,48,0.5),
+      0 -10px 24px -8px rgba(138,68,255,0.5);
   }
 
   /* ---------- SCROLL PROGRESS BAR ---------- */
@@ -1324,7 +1329,7 @@
   // ---------- Card glow shadow on tap (touch devices) ----------
   // Delegated + closest(): tapping a small card activates only the nearest matching card
   // (the small card itself, e.g. avatar/logo), not an ancestor big card it happens to sit inside.
-  var glowSelector = '.hero-card, .section-card, .card, .prog-card, .tpt-card, .footer-card, .ach-placeholder-card, .cert-gallery, .avatar, .footer-crest-badge, .nav-inner';
+  var glowSelector = '.hero-card, .section-card, .card, .prog-card, .tpt-card, .footer-card, .ach-placeholder-card, .cert-gallery, .avatar, .footer-crest-badge, .nav-inner, .pill, .icon-btn, .back-to-top';
   var glowShadowCards = Array.prototype.slice.call(document.querySelectorAll(glowSelector));
   function clearGlowActive(){
     glowShadowCards.forEach(function(c){ c.classList.remove('is-glow-active'); });
