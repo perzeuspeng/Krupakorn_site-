@@ -63,6 +63,7 @@
     -webkit-font-smoothing:antialiased;
     -webkit-tap-highlight-color:transparent;
     overflow-wrap:break-word;
+    padding-top:94px; /* fallback; JS sets the exact header height on load */
     word-break:break-word;
   }
   button, a{touch-action:manipulation;}
@@ -199,7 +200,7 @@
   }
 
   /* ---------- NAV ---------- */
-  header.nav{position:sticky; top:0; z-index:60; padding:18px 0;}
+  header.nav{position:fixed; top:0; left:0; right:0; z-index:60; padding:18px 0;}
   .nav-inner{
     display:flex; align-items:center; justify-content:space-between;
     max-width:var(--container-w); margin:0 auto; padding:10px 10px 10px 18px;
@@ -1225,8 +1226,17 @@
     if (scrollProgress) scrollProgress.style.width = pct + '%';
   }
 
-  // ---------- Sticky header elevation on scroll ----------
+  // ---------- Fixed header: reserve space so page content isn't hidden underneath ----------
   var navHeader = document.querySelector('header.nav');
+  function updateHeaderOffset(){
+    if (!navHeader) return;
+    document.body.style.paddingTop = navHeader.offsetHeight + 'px';
+  }
+  updateHeaderOffset();
+  window.addEventListener('resize', updateHeaderOffset);
+  window.addEventListener('load', updateHeaderOffset);
+
+  // ---------- Sticky header elevation on scroll ----------
   function updateHeaderElevation(){
     if (!navHeader) return;
     navHeader.classList.toggle('scrolled', window.scrollY > 12);
